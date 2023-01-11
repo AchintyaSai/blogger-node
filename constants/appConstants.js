@@ -11,7 +11,8 @@ const connectionParams = {
     host: conParamsFromJson.host,
     user: conParamsFromJson.user,
     password: conParamsFromJson.password,
-    port: conParamsFromJson.port
+    port: conParamsFromJson.port,
+    database : conParamsFromJson.database
 }
 
 module.exports = {
