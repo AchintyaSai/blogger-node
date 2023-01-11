@@ -15,7 +15,15 @@ const connectionParams = {
     database : conParamsFromJson.database
 }
 
+const methodTypeConstant = {
+    SELECT : 1,
+    UPDATE : 2,
+    DELETE : 3,
+    INSERT : 4
+}
+
 module.exports = {
     HttpStatusCode,
-    connectionParams
+    connectionParams,
+    methodTypeConstant
 }

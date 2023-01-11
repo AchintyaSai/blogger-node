@@ -1,7 +1,8 @@
 const router = require('express').Router();
 
-const{ getLoginDetails } = require('../controllers/loginController.js')
+const{ getLoginDetails, insertIntoSignupTable } = require('../controllers/loginController.js')
 
 router.get('/', getLoginDetails);
+router.post('/', insertIntoSignupTable)
 
 module.exports = router;

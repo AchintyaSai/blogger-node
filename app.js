@@ -10,9 +10,12 @@ app.use(express.json());
 app.use(cors())
 
 app.use('/login',loginRoutes )
-app.use('/', (req, res) => {
-    dbOperation.connectToDB();
-    res.write("Connected!")
-    return res.end();
-})
+
 app.listen(8080, ()=> console.log("Server running on port 8080"))
+
+// app.use('/', (req, res) => {
+//     res.json = "{}";
+//     res.writeHead(404, "Something went dfsdfsdfv")
+//     res.write("Hii")
+//     return res.end();
+// })
