@@ -1,4 +1,5 @@
 const dbOperation = require('../database/db-operations')
+var popupMsg = require('../constants/popup-message')
 
 const getLoginDetails = (req, res) => {
     var result = dbOperation.selectFromDB("signup_table", []);
@@ -14,11 +15,10 @@ const getLoginDetails = (req, res) => {
 
 const insertIntoSignupTable = (req, res) => {
     var result = dbOperation.insertIntoDB("signup_table", {
-        "id" : "5",
-        "full_name" : "Aravindh",
-        "email" : "Hello@1234",
-        "phone" : "7478724592",
-        "country" : "IND"
+        "full_name" : req.body.full_name,
+        "email" : req.body.email,
+        "phone" : req.body.phone,
+        "country" : req.body.country
     });
 
     result.then(data => {
@@ -26,7 +26,11 @@ const insertIntoSignupTable = (req, res) => {
         res.write(JSON.stringify(data));
         return res.end();
     }, err => {
-        res.write(JSON.stringify(err))
+        if(err.code == "ER_DUP_ENTRY")
+            res.write(JSON.stringify(popupMsg.messageBody.DUP_USER));
+        else
+            res.write(JSON.stringify(data));
+            
         return res.end();
     })
 }

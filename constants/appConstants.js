@@ -22,8 +22,13 @@ const methodTypeConstant = {
     INSERT : 4
 }
 
+const dbErrorCodes = {
+    DUP_USER : "ER_DUP_ENTRY"
+}
+
 module.exports = {
     HttpStatusCode,
     connectionParams,
-    methodTypeConstant
+    methodTypeConstant,
+    dbErrorCodes
 }
