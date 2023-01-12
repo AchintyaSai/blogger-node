@@ -10,7 +10,7 @@ const con = mySqlClient.createConnection({
     database: appConstant.connectionParams.database
 })
 
-function executeQuery(callBack) {
+function execute(callBack) {
     console.log(con.state);
     // if (con.state == 'disconnected'){
     //     con.connect( (err) => {
@@ -25,7 +25,7 @@ function executeQuery(callBack) {
 
 function selectFromDB(tableName, columnObj) {
     var promise = new Promise((resolve, reject) => {
-        executeQuery(() => {
+        execute(() => {
             try {
                 var sql = constructSqlQuery(appConstant.methodTypeConstant.SELECT, tableName, columnObj)
                 console.log(sql)
@@ -44,7 +44,7 @@ function selectFromDB(tableName, columnObj) {
 
 function insertIntoDB(tableName, dataObj) {
     var promise = new Promise((resolve, reject) => {
-        executeQuery(() => {
+        execute(() => {
             try {
                 var sql = constructSqlQuery(appConstant.methodTypeConstant.INSERT, tableName, dataObj)
                 console.log(sql)
@@ -101,7 +101,27 @@ function constructSqlQuery(queryType, tableName, obj) {
     }
 }
 
+function executeQuery(sqlQuery)
+{
+    var promise = new Promise((resolve, reject) => {
+        execute(() => {
+            try {
+                con.query(sqlQuery, (err, result, fields) => {
+                    if (err) reject(err)
+                    else resolve(result)
+                })
+            } catch (ex) {
+                reject(ex);
+            }
+        })
+    });
+
+    return promise;
+}
+
+
 module.exports = {
     selectFromDB,
-    insertIntoDB
+    insertIntoDB,
+    executeQuery
 }

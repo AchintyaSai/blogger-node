@@ -26,11 +26,14 @@ const insertIntoSignupTable = (req, res) => {
         res.write(JSON.stringify(data));
         return res.end();
     }, err => {
-        if(err.code == "ER_DUP_ENTRY")
+        res.writeHead(500, "Internal Server Error")
+        if(err.code == "ER_DUP_ENTRY"){
             res.write(JSON.stringify(popupMsg.messageBody.DUP_USER));
-        else
+        }
+        else{
             res.write(JSON.stringify(data));
-            
+        }
+
         return res.end();
     })
 }
