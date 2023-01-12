@@ -119,9 +119,16 @@ function executeQuery(sqlQuery)
     return promise;
 }
 
+const sendOTPToMail = (mailAddress) => 
+{
+    var sqlQuery = "SELECT otp_value from otp_table WHERE email='" + mailAddress +"'"
+    return executeQuery(sqlQuery);
+}
+
 
 module.exports = {
     selectFromDB,
     insertIntoDB,
-    executeQuery
+    executeQuery,
+    sendOTPToMail
 }
