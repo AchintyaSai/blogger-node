@@ -1,6 +1,8 @@
 const dbOperation = require('../database/db-operations')
+const cryptoLayer = require('../core/crypto-layer')
 var popupMsg = require('../constants/popup-message')
 const nodemailer = require('nodemailer')
+const { response } = require('express')
 
 const getLoginDetails = (req, res) => {
     var result = dbOperation.selectFromDB("signup_table", []);
@@ -14,7 +16,7 @@ const getLoginDetails = (req, res) => {
     })
 }
 
-const insertIntoSignupTable = (req, res) => {
+const insertIntoSignupTable = (req, res, next) => {
     var result = dbOperation.insertIntoDB("signup_table", {
         "full_name" : req.body.full_name,
         "email" : req.body.email,
@@ -26,12 +28,14 @@ const insertIntoSignupTable = (req, res) => {
         sendEmail(req.body.email, res)
 
     }, err => {
-        res.writeHead(500, "Internal Server Error")
+        //res.writeHead(500, "Internal Server Error")
+        res.status(500)
+
         if(err.code == "ER_DUP_ENTRY"){
-            res.write(JSON.stringify(popupMsg.messageBody.DUP_USER));
+            cryptoLayer.encryptResponse(popupMsg.messageBody.DUP_USER, res);
         }
         else{
-            res.write(JSON.stringify(data));
+            cryptoLayer.encryptResponse(data, res);
         }
 
         return res.end();
@@ -64,10 +68,10 @@ const sendEmail = (email, response) =>
             if (err) {
               console.log("Error " + err);
             } else {
-            //   console.log(data);
-              response.writeHead(200, "Success")
-              response.write(JSON.stringify(data));
-              return response.end();
+            //  console.log(data);
+                response.status(200)
+                cryptoLayer.encryptResponse(data, response);
+                return response.end();
             }
           });
     }, err => {

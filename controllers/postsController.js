@@ -1,12 +1,13 @@
 const dbOperations = require('../database/db-operations')
+const cryptoLayer = require('../core/crypto-layer')
 
 const getPost = (req, res) => {
     let sqlQuery = "CALL update_view_procedure(" + req.params['postId'] +")"
     dbOperations.executeQuery(sqlQuery).then(data => {
-        res.write(JSON.stringify(data[0][0]))
+        cryptoLayer.encryptResponse(data[0][0], res)
         return res.end()
     }, err => {
-        res.write(JSON.stringify(err))
+        cryptoLayer.encryptResponse(err, res)
         return res.end()
     })
 }
@@ -28,6 +29,11 @@ const putPost = (req, res) => {
     })
 }
 
+const getPostForProfile = (req, res) => {
+
+    let sqlQuery = "SELECT * from posts_table WHERE post_category iN (2,3)"
+    dbOperations.executeQuery()
+}
 module.exports = {
     getPost,
     putPost
