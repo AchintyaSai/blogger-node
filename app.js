@@ -9,6 +9,7 @@ const loginRoutes = require('./routes/loginRoutes');
 const otpRoutes = require('./routes/otpRoutes');
 const postsRoute = require('./routes/postsRoutes')
 const userRoute = require('./routes/userRoutes')
+const fileRoute = require('./routes/fileOperationRoutes')
 
 const cryptoLayer = require('./core/crypto-layer')
 
@@ -23,6 +24,7 @@ app.use('/login', loginRoutes);
 app.use('/otp', otpRoutes);
 app.use('/posts', postsRoute)
 app.use('/user', userRoute)
+app.use('/file', fileRoute)
 
 
 app.listen(8080, () => {

@@ -1,4 +1,3 @@
-const app = require('express')();
 const jwt = require('jsonwebtoken');
 const cryptoLayer = require('../core/crypto-layer')
 
