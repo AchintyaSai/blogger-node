@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/AchintyaSai/blogger-node#readme",
   "dependencies": {
+    "aws-sdk": "^2.1297.0",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",

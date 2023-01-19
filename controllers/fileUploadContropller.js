@@ -2,6 +2,8 @@ const multer = require('multer');
 const util = require('util');
 const maxSize = 200 * 1024 * 1024;
 const fs = require("fs")
+const AWS = require('aws-sdk');
+require('dotenv').config()
 
 let storage = multer.diskStorage({
     filename: (req, file, cb) => {
@@ -32,6 +34,8 @@ const fileUpload = (req, res) => {
                 });    
                 return
             }
+            if(process.env.UPLOAD_TO_AWS == "true")
+                uploadToS3("./file-system/"+ req.query.user_id+"/"+req.file.filename); 
             res.status(200).send({
                 message: "Uploaded the file successfully: "+ req.file.originalname,
             });
@@ -42,6 +46,41 @@ const fileUpload = (req, res) => {
         });
     }
 }
+
+
+const AWSCredentials = {
+    accessKey: process.env.AWS_ACCESS_KEY,
+    secret: process.env.SECRET_KEY,
+    bucketName: process.env.AWS_BUCKET_NAME
+};
+
+const s3 = new AWS.S3({
+    accessKeyId: AWSCredentials.accessKey,
+    secretAccessKey: AWSCredentials.secret
+});
+
+const uploadToS3 = (fileName) => {
+    // Read content from the file
+    const fileContent = fs.readFileSync(fileName);
+
+    // Setting up S3 upload parameters
+    const params = {
+        Bucket: AWSCredentials.bucketName,
+        Key: fileName.replace('./', ""),
+        Body: fileContent
+    };
+
+    // Uploading files to the bucket
+    s3.upload(params, function(err, data) {
+        if (err) {
+            throw err;
+        }
+        console.log(`File uploaded successfully. ${data.Location}`);
+    });
+};
+
+
+
 module.exports = {
     fileUpload
 }
